@@ -10,18 +10,22 @@ import (
 )
 
 func main() {
-	err := auth.LoadFiles("certificates/app.rsa", "certificates/app.rsa.pub")
-	if err != nil {
-		log.Fatalf("Certificates not found: %v", err)
-	}
-
 	e := echo.New()
 
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "[${time_rfc3339}] ${status} ${method} ${path} (${remote_ip}) ${latency_human}\n",
+		Output: e.Logger.Output(),
+	}))
 
 	if dbMongo.CheckConnection() == 0 {
 		log.Fatal("Can't connect to DB")
+	}
+
+	err := auth.LoadFiles("certificates/app.rsa", "certificates/app.rsa.pub")
+	if err != nil {
+		log.Fatalf("Certificates not found: %v", err)
 	}
 
 	handler.RouteLogin(e)
