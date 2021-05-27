@@ -8,4 +8,6 @@ require (
 	github.com/labstack/gommon v0.3.0
 	github.com/stretchr/testify v1.7.0 // indirect
 	go.mongodb.org/mongo-driver v1.5.2
+	go.uber.org/multierr v1.7.0 // indirect
+	go.uber.org/zap v1.17.0 // indirect
 )
