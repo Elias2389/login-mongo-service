@@ -3,7 +3,7 @@ package auth
 import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
-	"login-mongo-service/model"
+	"login-mongo-service/internal/model"
 	"time"
 )
 

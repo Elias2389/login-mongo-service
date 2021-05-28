@@ -1,9 +1,9 @@
-package dbMongo
+package db
 
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
-	"login-mongo-service/model"
+	"login-mongo-service/internal/model"
 	"time"
 )
 

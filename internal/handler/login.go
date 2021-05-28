@@ -2,9 +2,9 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"login-mongo-service/auth"
-	"login-mongo-service/dbMongo"
-	"login-mongo-service/model"
+	"login-mongo-service/db"
+	"login-mongo-service/internal/auth"
+	"login-mongo-service/internal/model"
 	"net/http"
 )
 
@@ -26,7 +26,7 @@ func (l *login) Login(c echo.Context) error {
 		return c.JSON(http.StatusOK, resp)
 	}
 
-	user, userExist, id := dbMongo.UserExist(data.Email)
+	user, userExist, id := db.UserExist(data.Email)
 
 	if !userExist {
 		resp := NewResponse(Error, "Ocurrio un error", nil)
