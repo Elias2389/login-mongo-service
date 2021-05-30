@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"github.com/labstack/echo/v4"
-	"login-mongo-service/auth"
+	"login-mongo-service/internal/auth"
 	"net/http"
 )
 

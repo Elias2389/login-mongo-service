@@ -2,6 +2,7 @@ package model
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"golang.org/x/crypto/bcrypt"
 	"time"
 )
 
@@ -19,4 +20,12 @@ type User struct {
 	Avatar   string             `bson:"avatar" json:"avatar,omitempty"`
 	Banner   string             `bson:"banner" json:"banner,omitempty"`
 	Website  string             `bson:"website" json:"website,omitempty"`
+}
+
+// Compare Passwords
+func (u User) ComparePasswords(pass string) error {
+	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(pass)); err != nil {
+		return err
+	}
+	return nil
 }

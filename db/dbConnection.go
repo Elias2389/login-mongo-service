@@ -1,4 +1,4 @@
-package dbMongo
+package db
 
 import (
 	"context"
@@ -10,10 +10,10 @@ import (
 const userMongoDb string = "twittor_user"
 const passMongoDb string = "TestUser123"
 
-var MongoConnect = connectDB()
-var clientOptions = options.Client().ApplyURI("mongodb+srv://" + userMongoDb + ":" + passMongoDb + "@twittor.blv2u.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+var MongoConnect = ConnectDB()
+var clientOptions = options.Client().ApplyURI("mongodb+srv://" + userMongoDb + ":" + passMongoDb + "@twittor.blv2u.mongodb.net/myFirstDatabase")
 
-func connectDB() *mongo.Client {
+func ConnectDB() *mongo.Client {
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
 		log.Fatal(err)
@@ -36,4 +36,12 @@ func CheckConnection() int {
 		return 0
 	}
 	return 1
+}
+
+func ValidateConnection(client *mongo.Client) bool {
+	err := client.Ping(context.TODO(), nil)
+	if err != nil {
+		return false
+	}
+	return true
 }

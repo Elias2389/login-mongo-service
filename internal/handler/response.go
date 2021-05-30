@@ -1,6 +1,6 @@
 package handler
 
-import "login-mongo-service/model"
+import "login-mongo-service/internal/model"
 
 const (
 	Error   = "error"

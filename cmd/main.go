@@ -1,38 +1,44 @@
 package main
 
 import (
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"github.com/labstack/gommon/log"
-	"login-mongo-service/auth"
-	"login-mongo-service/dbMongo"
-	"login-mongo-service/handler"
+	"log"
+	"login-mongo-service/config"
+	"login-mongo-service/db"
+	"login-mongo-service/internal/server"
+	"login-mongo-service/pkg/logger"
+	"login-mongo-service/pkg/utils"
+	"os"
 )
 
 func main() {
-	e := echo.New()
 
-	e.Use(middleware.Recover())
-	e.Use(middleware.Logger())
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "[${time_rfc3339}] ${status} ${method} ${path} (${remote_ip}) ${latency_human}\n",
-		Output: e.Logger.Output(),
-	}))
+	log.Println("Starting api server")
 
-	if dbMongo.CheckConnection() == 0 {
-		log.Fatal("Can't connect to DB")
+	configPath := utils.GetConfigPath(os.Getenv("config"))
+
+	cfgFile, err := config.LoadConfig(configPath)
+	if err != nil {
+		log.Fatalf("LoadConfig: %v", err)
 	}
 
-	err := auth.LoadFiles("certificates/app.rsa", "certificates/app.rsa.pub")
+	cfg, err := config.ParseConfig(cfgFile)
 	if err != nil {
-		log.Fatalf("Certificates not found: %v", err)
+		log.Fatalf("ParseConfig: %v", err)
 	}
 
-	handler.RouteLogin(e)
+	appLogger := logger.NewApiLogger(cfg)
 
-	log.Printf("Init server in port: 9191")
-	err = e.Start(":9191")
-	if err != nil {
-		log.Printf("Error en el servidor: %v\n", err)
+	appLogger.InitLogger()
+	appLogger.Infof("AppVersion: %s, LogLevel: %s, Mode: %s, SSL: %v", cfg.Server.AppVersion, cfg.Logger.Level, cfg.Server.Mode, cfg.Server.SSL)
+
+	mongoClient := db.ConnectDB()
+	connectMongo := db.ValidateConnection(mongoClient)
+	if connectMongo == true {
+		appLogger.Info("MongoDB connected")
+	}
+
+	s := server.NewServer(cfg, mongoClient, appLogger)
+	if err := s.RunServer(); err != nil {
+		log.Fatal(err)
 	}
 }

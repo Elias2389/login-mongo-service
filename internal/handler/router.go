@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"login-mongo-service/middleware"
+	"login-mongo-service/internal/middleware"
 )
 
 // RouteLogin .
