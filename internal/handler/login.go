@@ -41,7 +41,7 @@ func (l *login) Login(c echo.Context) error {
 
 	response := model.LoginResponse{
 		ID:    id,
-		User:  user,
+		User:  &user,
 		Token: token,
 	}
 

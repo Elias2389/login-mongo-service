@@ -41,9 +41,4 @@ func main() {
 	if err := s.RunServer(); err != nil {
 		log.Fatal(err)
 	}
-
-	//err := auth.LoadFiles("certificates/app.rsa", "certificates/app.rsa.pub")
-	//if err != nil {
-	//	log.Fatalf("Certificates not found: %v", err)
-	//}
 }

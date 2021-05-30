@@ -11,7 +11,7 @@ const userMongoDb string = "twittor_user"
 const passMongoDb string = "TestUser123"
 
 var MongoConnect = ConnectDB()
-var clientOptions = options.Client().ApplyURI("mongodb+srv://" + userMongoDb + ":" + passMongoDb + "@twittor.blv2u.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+var clientOptions = options.Client().ApplyURI("mongodb+srv://" + userMongoDb + ":" + passMongoDb + "@twittor.blv2u.mongodb.net/myFirstDatabase")
 
 func ConnectDB() *mongo.Client {
 	client, err := mongo.Connect(context.TODO(), clientOptions)
