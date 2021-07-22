@@ -22,7 +22,7 @@ func NewAuthUC(cfg *config.Config, mongoRepo repository.MongoRepository) *authUC
 func (a authUC) RegisterUser(ctx echo.Context, user *model.User) (*model.User, error) {
 	existUser := a.mongoRepo.GetUserByEmail(ctx.Request().Context(), user.Email)
 	if existUser != nil {
-		return nil, nil
+		return existUser, nil
 	}
 
 	createUser := a.mongoRepo.RegisterUser(ctx.Request().Context(), user)
