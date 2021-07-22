@@ -3,7 +3,7 @@ package server
 import (
 	"github.com/labstack/echo/v4"
 	authHttp "login-mongo-service/internal/auth/delivery/http"
-	authHandler "login-mongo-service/internal/auth/delivery/http/handler"
+	authHandler "login-mongo-service/internal/auth/delivery/http/controller"
 	authRepository "login-mongo-service/internal/auth/repository"
 	authUseCase "login-mongo-service/internal/auth/usecase"
 )

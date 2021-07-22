@@ -1,4 +1,4 @@
-package handler
+package controller
 
 import (
 	"github.com/labstack/echo/v4"
@@ -10,17 +10,17 @@ import (
 )
 
 // Auth handlers
-type authHandler struct {
+type authController struct {
 	cfg    *config.Config
 	authUC usecase.UseCase
 }
 
-func NewAuthHandler(cfg *config.Config, authUC usecase.UseCase) *authHandler {
-	return &authHandler{cfg: cfg, authUC: authUC}
+func NewAuthHandler(cfg *config.Config, authUC usecase.UseCase) *authController {
+	return &authController{cfg: cfg, authUC: authUC}
 }
 
 // Handler Register
-func (h *authHandler) RegisterUser() echo.HandlerFunc {
+func (h *authController) RegisterUser() echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		user := &model.User{}
 
@@ -38,7 +38,7 @@ func (h *authHandler) RegisterUser() echo.HandlerFunc {
 }
 
 // Handler Login
-func (h *authHandler) Login() echo.HandlerFunc {
+func (h *authController) Login() echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		requestData := model.Login{}
 		if err := ctx.Bind(&requestData); err != nil {
