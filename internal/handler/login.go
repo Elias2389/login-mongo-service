@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
+	"go.mongodb.org/mongo-driver/mongo"
 	"login-mongo-service/db"
 	"login-mongo-service/internal/auth"
 	"login-mongo-service/internal/model"
@@ -9,12 +10,12 @@ import (
 )
 
 type login struct {
-	storage interface{}
+	MongoClient *mongo.Client
 }
 
 // Initialize login
-func NewLogin() login {
-	return login{}
+func NewLogin(client *mongo.Client) *login {
+	return &login{MongoClient: client}
 }
 
 // Method to do login
@@ -26,7 +27,7 @@ func (l *login) Login(c echo.Context) error {
 		return c.JSON(http.StatusOK, resp)
 	}
 
-	user, userExist, id := db.UserExist(data.Email)
+	user, userExist, id := db.UserExist(data.Email, l.MongoClient)
 
 	if !userExist {
 		resp := NewResponse(Error, "Ocurrio un error", nil)

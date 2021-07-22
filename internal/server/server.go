@@ -3,9 +3,9 @@ package server
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/labstack/gommon/log"
 	"go.mongodb.org/mongo-driver/mongo"
 	"login-mongo-service/config"
-	"login-mongo-service/pkg/logger"
 	"net/http"
 	"time"
 )
@@ -19,15 +19,14 @@ const (
 
 // Server Struct
 type Server struct {
-	echo   *echo.Echo
-	cfg    *config.Config
-	mongo  *mongo.Client
-	logger logger.Logger
+	echo  *echo.Echo
+	cfg   *config.Config
+	mongo *mongo.Client
 }
 
 // New server
-func NewServer(cfg *config.Config, mongo *mongo.Client, logger logger.Logger) *Server {
-	return &Server{echo: echo.New(), cfg: cfg, mongo: mongo, logger: logger}
+func NewServer(cfg *config.Config, mongo *mongo.Client) *Server {
+	return &Server{echo: echo.New(), cfg: cfg, mongo: mongo}
 }
 
 // IniT server
@@ -55,9 +54,8 @@ func (s Server) RunServer() error {
 	//	s.logger.Fatalf("Certificates not found: %v", err)
 	//}
 
-	s.logger.Infof("Server is listening on PORT: %s", s.cfg.Server.Port)
 	if err := s.echo.StartServer(server); err != nil {
-		s.logger.Fatal("Error starting server", err)
+		log.Printf("Error starting server %s", err)
 	}
 
 	return nil

@@ -7,13 +7,17 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const userMongoDb string = "twittor_user"
-const passMongoDb string = "TestUser123"
+type MongoDb struct {
+	MongoURI string
+}
 
-var MongoConnect = ConnectDB()
-var clientOptions = options.Client().ApplyURI("mongodb+srv://" + userMongoDb + ":" + passMongoDb + "@twittor.blv2u.mongodb.net/myFirstDatabase")
+func NewConnection(mongoUri string) *MongoDb {
+	return &MongoDb{MongoURI: mongoUri}
+}
 
-func ConnectDB() *mongo.Client {
+// Connect to Mongo DB
+func (m MongoDb) ConnectToDB() *mongo.Client {
+	clientOptions := options.Client().ApplyURI(m.MongoURI)
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
 		log.Fatal(err)
@@ -30,14 +34,7 @@ func ConnectDB() *mongo.Client {
 	return client
 }
 
-func CheckConnection() int {
-	err := MongoConnect.Ping(context.TODO(), nil)
-	if err != nil {
-		return 0
-	}
-	return 1
-}
-
+// Validate Connection by PING
 func ValidateConnection(client *mongo.Client) bool {
 	err := client.Ping(context.TODO(), nil)
 	if err != nil {

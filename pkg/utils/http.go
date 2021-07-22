@@ -3,9 +3,6 @@ package utils
 import (
 	"context"
 	"github.com/labstack/echo/v4"
-	"login-mongo-service/config"
-	"login-mongo-service/pkg/logger"
-	"net/http"
 	"time"
 )
 
@@ -35,70 +32,4 @@ func GetConfigPath(configPath string) string {
 		return "./config/config-docker"
 	}
 	return "./config/config-local"
-}
-
-// Configure jwt cookie
-func ConfigureJWTCookie(cfg *config.Config, jwtToken string) *http.Cookie {
-	return &http.Cookie{
-		Name:       cfg.Cookie.Name,
-		Value:      jwtToken,
-		Path:       "/",
-		RawExpires: "",
-		MaxAge:     cfg.Cookie.MaxAge,
-		Secure:     cfg.Cookie.Secure,
-		HttpOnly:   cfg.Cookie.HTTPOnly,
-		SameSite:   0,
-	}
-}
-
-// Configure jwt cookie
-func CreateSessionCookie(cfg *config.Config, session string) *http.Cookie {
-	return &http.Cookie{
-		Name:  cfg.Session.Name,
-		Value: session,
-		Path:  "/",
-		// Domain: "/",
-		// Expires:    time.Now().Add(1 * time.Minute),
-		RawExpires: "",
-		MaxAge:     cfg.Session.Expire,
-		Secure:     cfg.Cookie.Secure,
-		HttpOnly:   cfg.Cookie.HTTPOnly,
-		SameSite:   0,
-	}
-}
-
-// Delete session
-func DeleteSessionCookie(c echo.Context, sessionName string) {
-	c.SetCookie(&http.Cookie{
-		Name:   sessionName,
-		Value:  "",
-		Path:   "/",
-		MaxAge: -1,
-	})
-}
-
-// Get user ip address
-func GetIPAddress(c echo.Context) string {
-	return c.Request().RemoteAddr
-}
-
-//// Error response with logging error for echo context
-//func ErrResponseWithLog(ctx echo.Context, logger logger.Logger, err error) error {
-//	logger.Errorf(
-//		"ErrResponseWithLog, RequestID: %s, IPAddress: %s, Error: %s",
-//		GetRequestID(ctx),
-//		GetIPAddress(ctx),
-//		err,
-//	)
-//	return ctx.JSON(httpErrors.ErrorResponse(err))
-//}
-
-// Error response with logging error for echo context
-func LogResponseError(ctx echo.Context, logger logger.Logger, err error) {
-	logger.Errorf(
-		"ErrResponseWithLog, RequestID: %s, IPAddress: %s, Error: %s",
-		GetRequestID(ctx),
-		GetIPAddress(ctx),
-		err,
-	)
 }

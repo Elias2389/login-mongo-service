@@ -3,16 +3,17 @@ package db
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"login-mongo-service/internal/model"
 	"time"
 )
 
 // Method to check if user exist
-func UserExist(email string) (model.User, bool, string) {
+func UserExist(email string, mongoClient *mongo.Client) (model.User, bool, string) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	db := MongoConnect.Database("twittor")
+	db := mongoClient.Database("twittor")
 	col := db.Collection("user")
 
 	condition := bson.M{"email": email}
