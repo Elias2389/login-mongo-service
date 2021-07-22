@@ -6,7 +6,6 @@ import (
 	"login-mongo-service/internal/auth/usecase"
 	"login-mongo-service/internal/handler"
 	"login-mongo-service/internal/model"
-	"login-mongo-service/pkg/logger"
 	"net/http"
 )
 
@@ -14,16 +13,28 @@ import (
 type authHandler struct {
 	cfg    *config.Config
 	authUC usecase.UseCase
-	logger logger.Logger
 }
 
-func NewAuthHandler(cfg *config.Config, authUC usecase.UseCase, logger logger.Logger) *authHandler {
-	return &authHandler{cfg: cfg, authUC: authUC, logger: logger}
+func NewAuthHandler(cfg *config.Config, authUC usecase.UseCase) *authHandler {
+	return &authHandler{cfg: cfg, authUC: authUC}
 }
 
 // Handler Register
-func (h *authHandler) Register() echo.HandlerFunc {
-	return nil
+func (h *authHandler) RegisterUser() echo.HandlerFunc {
+	return func(ctx echo.Context) error {
+		user := &model.User{}
+
+		if err := ctx.Bind(user); err != nil {
+			return ctx.JSON(http.StatusBadRequest, err)
+		}
+
+		createUser, err := h.authUC.RegisterUser(ctx, user)
+		if err != nil {
+			return ctx.JSON(http.StatusBadRequest, err)
+		}
+
+		return ctx.JSON(http.StatusOK, createUser)
+	}
 }
 
 // Handler Login

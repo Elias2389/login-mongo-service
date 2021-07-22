@@ -9,17 +9,8 @@ import (
 
 // App config struct
 type Config struct {
-	Server   ServerConfig
-	Postgres PostgresConfig
-	Redis    RedisConfig
-	MongoDB  MongoDB
-	Cookie   Cookie
-	Store    Store
-	Session  Session
-	Metrics  Metrics
-	Logger   Logger
-	AWS      AWS
-	Jaeger   Jaeger
+	Server  ServerConfig
+	MongoDB MongoDB
 }
 
 // Server config struct
@@ -38,84 +29,9 @@ type ServerConfig struct {
 	Debug             bool
 }
 
-// Logger config
-type Logger struct {
-	Development       bool
-	DisableCaller     bool
-	DisableStacktrace bool
-	Encoding          string
-	Level             string
-}
-
-// Postgresql config
-type PostgresConfig struct {
-	PostgresqlHost     string
-	PostgresqlPort     string
-	PostgresqlUser     string
-	PostgresqlPassword string
-	PostgresqlDbname   string
-	PostgresqlSSLMode  bool
-	PgDriver           string
-}
-
-// Redis config
-type RedisConfig struct {
-	RedisAddr      string
-	RedisPassword  string
-	RedisDB        string
-	RedisDefaultdb string
-	MinIdleConns   int
-	PoolSize       int
-	PoolTimeout    int
-	Password       string
-	DB             int
-}
-
 // MongoDB config
 type MongoDB struct {
 	MongoURI string
-}
-
-// Cookie config
-type Cookie struct {
-	Name     string
-	MaxAge   int
-	Secure   bool
-	HTTPOnly bool
-}
-
-// Session config
-type Session struct {
-	Prefix string
-	Name   string
-	Expire int
-}
-
-// Metrics config
-type Metrics struct {
-	URL         string
-	ServiceName string
-}
-
-// Store config
-type Store struct {
-	ImagesFolder string
-}
-
-// AWS S3
-type AWS struct {
-	Endpoint       string
-	MinioAccessKey string
-	MinioSecretKey string
-	UseSSL         bool
-	MinioEndpoint  string
-}
-
-// AWS S3
-type Jaeger struct {
-	Host        string
-	ServiceName string
-	LogSpans    bool
 }
 
 // Load config file from given path

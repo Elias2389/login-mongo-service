@@ -16,8 +16,8 @@ func (s *Server) MapHandlers(e *echo.Echo) error {
 
 	userGroup := v1.Group("/user")
 	mongoRepo := authRepository.NewMongoRepository(s.mongo)
-	authUC := authUseCase.NewAuthUC(s.cfg, mongoRepo, s.logger)
-	authH := authHandler.NewAuthHandler(s.cfg, authUC, s.logger)
+	authUC := authUseCase.NewAuthUC(s.cfg, mongoRepo)
+	authH := authHandler.NewAuthHandler(s.cfg, authUC)
 	authHttp.MapAuthRoutes(userGroup, authH)
 
 	return nil

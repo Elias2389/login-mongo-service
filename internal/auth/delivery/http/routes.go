@@ -7,6 +7,6 @@ import (
 
 // Map handlers about User Auth
 func MapAuthRoutes(authGroup *echo.Group, h delivery.Handlers) {
-	authGroup.POST("/register", h.Register())
 	authGroup.POST("/login", h.Login())
+	authGroup.POST("/register", h.RegisterUser())
 }
